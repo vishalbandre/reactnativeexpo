@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StatusBar, StyleSheet, Text, View, TextInput, Button, Alert, FlatList } from 'react-native';
+import { ActivityIndicator, StatusBar, StyleSheet, Text, View, TextInput, Button, Alert, FlatList } from 'react-native';
 
 class App extends Component {
 
@@ -113,11 +113,18 @@ class App extends Component {
           />
 
           <Button
+            style={styles.button}
             title="Add"
             // onPress={() => Alert.alert('Data Saved!')}
             onPress={() => this.saveData()}
           />
         </View>
+
+        {this.state.isLoading &&
+          <View style={styles.loading}>
+            <ActivityIndicator color="red" size="large" animating={this.state.isLoading} />
+          </View>
+        }
       </View>
     );
   }
@@ -160,11 +167,18 @@ class App extends Component {
           ListFooterComponent={this.renderFooter}
           ItemSeparatorComponent={this.renderListSeparator}
           renderItem={({ item }) => (
-            <Text
-              style={styles.rowStyle}
-              onPress={this.showItem.bind(this, item.username)}>
-              {item.username} - {item.email}
-            </Text>
+            <View style={styles.row}>
+              <Text
+                style={{ height: 40, width: '30%', }}
+                onPress={this.showItem.bind(this, item.username)}>
+                {item.username}
+              </Text>
+              <Text
+                style={{ height: 40, width: '70%', }}
+                onPress={this.showItem.bind(this, item.email)}>
+                {item.email}
+              </Text>
+            </View>
           )}
           keyExtractor={(item, index) => index.toString()}
           style={styles.list_style}
@@ -177,6 +191,9 @@ class App extends Component {
 export default App;
 
 const styles = StyleSheet.create({
+  loading: {
+    marginTop: 100,
+  },
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight,
@@ -188,8 +205,9 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: "center",
     fontSize: 18,
+    color: "gray",
     fontWeight: "bold",
-    backgroundColor: '#606070',
+    backgroundColor: 'black',
     width: '100%',
   },
   text_style: {
@@ -198,19 +216,32 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 7,
   },
+  button: {
+    padding: 2,
+    fontSize: 8
+  },
   section_text_style: {
+    marginTop: 15,
+    marginBottom: 5,
     textAlign: 'center',
     color: '#fff',
-    fontSize: 16,
-    padding: 7,
+    fontSize: 17,
+    padding: 10,
+    backgroundColor: "whitesmoke"
   },
   list_style: {
     width: '90%',
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    padding: 10
   },
   row_style: {
     padding: 10,
     fontSize: 18,
     height: 44,
+    width: "50%",
   },
   list_separator: {
     height: 0.5,
